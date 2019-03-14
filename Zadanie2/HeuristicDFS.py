@@ -2,7 +2,7 @@ import Algorithm as alg
 import Node as node
 import time
 
-class DFS(alg.Algorithm):
+class HeuristicDFS(alg.Algorithm):
     __front = None      # A front of states
     __dic = None        # A dictionary for printed time
 
@@ -11,7 +11,7 @@ class DFS(alg.Algorithm):
         self.__dic = dict()
         self.__front = list()
         self.__generate_children()
-    
+
     def run(self):
         start_time = time.time()
         while True:
@@ -41,11 +41,28 @@ class DFS(alg.Algorithm):
             if curr_time > limit: 
                 self.spent_time = limit 
                 return False
-    
+
     def __generate_children(self):
+        curr_state = self.get_state()                       # Save current state
+        curr_knight = self.get_chessboard().get_knight()    # Save knight position
         pos_states = self.get_chessboard().possible_states()
+        num_of_children = dict()
         for state in pos_states:
             knight = state.pop()
-            new_node = node.Node(state, knight, self.get_state())
-            self.__front.insert(0, new_node)
-        
+            self.get_chessboard().change_state(state, knight)
+            child_states = self.get_chessboard().possible_states()
+            num_of_children[knight] = len(child_states)
+            state.append(knight)
+
+        children = list(num_of_children.items())
+        children.sort(reverse=True, key=lambda k: k[1])        # Sorts according to a number of children
+
+        for child in children:
+            knight = child[0]
+            for state in pos_states:
+                if knight in state:
+                    state.pop()     # Remove the knight
+                    new_node = node.Node(state, knight, curr_state)
+                    self.__front.insert(0, new_node)
+
+        self.get_chessboard().change_state(curr_state, curr_knight)
