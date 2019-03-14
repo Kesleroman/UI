@@ -18,19 +18,35 @@ for state in states:
     
 del(chessboard) """
 
-## Test of a DFS
-grid = (8,8)
-pos_knight = (0,0)
-chessboard = chess.Chessboard(grid, knight = pos_knight)
-algorithm = dfs.DFS(chessboard)
+def test_DFS(grid, pos_knight):
+        chessboard = chess.Chessboard(grid, knight = pos_knight)
+        algorithm = dfs.DFS(chessboard)
 
-chessboard = algorithm.get_chessboard()
-print(chessboard)
+        chessboard = algorithm.get_chessboard()
+        print('')
 
-if algorithm.run() == False:
-        print("Can't find the answer")
-else:
-        for line in chessboard.get_state():
-                print(line)
+        if algorithm.run() == False:
+                print("Can't find the answer")
+        else:
+                for line in chessboard.get_state():
+                        print(line)
 
-del(chessboard,algorithm)
+        spent_time = algorithm.spent_time
+        del(chessboard,algorithm)
+        return spent_time
+
+test_DFS((6,6), (0,0))
+test_DFS((6,6), (0,1))
+test_DFS((6,6), (0,2))
+test_DFS((6,6), (3,2))
+test_DFS((5,5), (0,2))
+
+
+""" total_time = 0
+for i in range(6):
+        for j in range(6):
+                total_time += test_DFS((6,6), (i,j))
+print("Total time is ", total_time, " seconds.\n" +
+        "Average time is ", total_time/36)   """      
+
+                

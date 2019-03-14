@@ -1,13 +1,13 @@
 
 class Chessboard:
-    __state = None
+    __state = None      # (type: list of lists)
     __knight = None     # (type: tuple) position of a knight
     __grid = None       # (type: tuple) square of a board
     __area = None       # type: int
-    __default = (0, 0)
+    __default = (0, 0)  # Default position of a knight
 
     def __init__(self, grid, knight = __default):
-        self.__state = list()   # type: list of lists
+        self.__state = list()   
         self.__grid = grid
         self.__area = grid[0] * grid[1]
         self.__knight = knight
@@ -20,6 +20,18 @@ class Chessboard:
 
         self.__state[self.__knight[0]][self.__knight[1]] = 1    # Place a knight on a board
 
+    def __next_state(self, horisontal, vertical):
+        x = self.__knight[0] + horisontal
+        y = self.__knight[1] + vertical
+
+        if  (x >= 0) and (x < self.__grid[0]) and (y >= 0) and (y < self.__grid[1]) and (self.__state[x][y] == 0):
+            new_state = self.__new_list(self.__state)                             # copy a state of the chessboard 
+            new_state[x][y] = new_state[self.__knight[0]][self.__knight[1]] + 1   # increments a number of a turn
+            new_state.append((x, y))                                              # appends a new position of a knight
+            return new_state   
+        
+        return None    
+
     ## Returns a list of possible future states.
     ## In the end of each state will be coordinates of a knight.
     def possible_states(self):
@@ -28,64 +40,48 @@ class Chessboard:
         y = self.__knight[1]
 
         # Up, Right
-        if (x - 2 > 0) and (y + 1 < self.__grid[1]) and (self.__state[x - 2][y + 1] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x - 2][y + 1] = new_state[x][y] + 1 
-            new_state.append((x - 2, y + 1))
-            states.append(new_state)
+        new_state = self.__next_state(-2, 1)
+        if new_state != None:
+            states.append(new_state)                     
 
         # Right, Up 
-        if (x - 1 >= 0) and (y + 2 < self.__grid[1]) and (self.__state[x - 1][y + 2] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x - 1][y + 2] = new_state[x][y] + 1 
-            new_state.append((x - 1, y + 2))
-            states.append(new_state)
+        new_state = self.__next_state(-1, 2)
+        if new_state != None:
+            states.append(new_state)                     
         
         # Right, Down
-        if (x + 1 < self.__grid[0]) and (y + 2 < self.__grid[1]) and (self.__state[x + 1][y + 2] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x + 1][y + 2] = new_state[x][y] + 1 
-            new_state.append((x + 1, y + 2))
-            states.append(new_state)
+        new_state = self.__next_state(1, 2)
+        if new_state != None:
+            states.append(new_state)                     
 
         # Down, Right
-        if (x + 2 < self.__grid[0]) and (y + 1 < self.__grid[1]) and (self.__state[x + 2][y + 1] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x + 2][y + 1] = new_state[x][y] + 1 
-            new_state.append((x + 2, y + 1))
-            states.append(new_state)
+        new_state = self.__next_state(2, 1)
+        if new_state != None:
+            states.append(new_state)                     
 
         # Down, Left
-        if (x + 2 < self.__grid[0]) and (y - 1 >= 0) and (self.__state[x + 2][y - 1] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x + 2][y - 1] = new_state[x][y] + 1 
-            new_state.append((x + 2, y - 1))
-            states.append(new_state)
+        new_state = self.__next_state(2, -1)
+        if new_state != None:
+            states.append(new_state)          
 
         # Left, Down
-        if (x + 1 < self.__grid[0]) and (y - 2 >= 0) and (self.__state[x + 1][y - 2] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x + 1][y - 2] = new_state[x][y] + 1 
-            new_state.append((x + 1, y - 2))
+        new_state = self.__next_state(1, -2)
+        if new_state != None:
             states.append(new_state)
 
         # Left, Up
-        if (x - 1 >= 0) and (y - 2 >= 0 ) and (self.__state[x - 1][y - 2] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x - 1][y - 2] = new_state[x][y] + 1 
-            new_state.append((x - 1, y - 2))
+        new_state = self.__next_state(-1, -2)
+        if new_state != None:
             states.append(new_state)
 
         # Up, Left
-        if (x - 2 >= 0) and (y - 1 >= 0) and (self.__state[x - 2][y - 1] == 0):
-            new_state = self.__new_list(self.__state)
-            new_state[x - 2][y - 1] = new_state[x][y] + 1 
-            new_state.append((x - 2, y - 1))
+        new_state = self.__next_state(-2, -1)
+        if new_state != None:
             states.append(new_state)
 
         return states
 
-    ## Creates copy of a list of lists and returns it.
+    ## Creates a copy of a list of lists and returns it.
     def __new_list(self, lst):
         new_list = list()
         for l in lst:
@@ -95,7 +91,13 @@ class Chessboard:
     def change_state(self, state, knight):
         self.__state = state
         self.__knight = knight
-    
+
+    def is_goal_state(self):
+        if self.__state[self.__knight[0]][self.__knight[1]] ==  self.__area:    # if a number of a turn is equal to an area of the chessboard.
+            return True
+        else:
+            return False
+        
     def get_grid(self):
         return self.__grid
 
@@ -104,10 +106,3 @@ class Chessboard:
 
     def get_state(self):
         return self.__state
-
-    def is_goal_state(self):
-        if self.__state[self.__knight[0]][self.__knight[1]] ==  self.__area:
-            return True
-        else:
-            return False
-        
