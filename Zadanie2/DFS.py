@@ -37,7 +37,7 @@ class DFS(alg.Algorithm):
                     print("%d seconds from start." % curr_time)
 
             ## If search of the solution is too long.
-            limit = 20  # seconds 
+            limit = 16  # seconds 
             if curr_time > limit: 
                 self.spent_time = limit 
                 return False
@@ -46,6 +46,6 @@ class DFS(alg.Algorithm):
         pos_states = self.get_chessboard().possible_states()
         for state in pos_states:
             knight = state.pop()
-            new_node = node.Node(state, knight, self.get_state())
+            new_node = node.Node(state, knight)
             self.__front.insert(0, new_node)
         

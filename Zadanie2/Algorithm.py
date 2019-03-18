@@ -8,7 +8,7 @@ class Algorithm:
 
     def __init__(self, chessboard):
         self.__chessboard = chessboard
-        self.__state = node.Node(chessboard.get_state(), chessboard.get_knight(), None)
+        self.__state = node.Node(chessboard.get_state(), chessboard.get_knight())
 
     def run(self):
         raise NotImplementedError

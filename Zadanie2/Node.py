@@ -1,12 +1,10 @@
 class Node:
     __state = None
     __knight = None
-    __prev = None     # A parent of this node.
 
-    def __init__(self, state, knight, prev):
+    def __init__(self, state, knight):
         self.__state = state
         self.__knight = knight
-        self.__prev = prev   
     
     def get_state(self):
         return self.__state

@@ -36,8 +36,6 @@ class Chessboard:
     ## In the end of each state will be coordinates of a knight.
     def possible_states(self):
         states = list()
-        x = self.__knight[0]
-        y = self.__knight[1]
 
         # Up, Right
         new_state = self.__next_state(-2, 1)

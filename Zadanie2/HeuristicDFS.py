@@ -37,7 +37,7 @@ class HeuristicDFS(alg.Algorithm):
                     print("%d seconds from start." % curr_time)
 
             ## If search of the solution is too long.
-            limit = 20  # seconds 
+            limit = 16  # seconds 
             if curr_time > limit: 
                 self.spent_time = limit 
                 return False
@@ -46,6 +46,8 @@ class HeuristicDFS(alg.Algorithm):
         curr_state = self.get_state()                       # Save current state
         curr_knight = self.get_chessboard().get_knight()    # Save knight position
         pos_states = self.get_chessboard().possible_states()
+
+        ## Count children of the generated states.
         num_of_children = dict()
         for state in pos_states:
             knight = state.pop()
@@ -62,7 +64,7 @@ class HeuristicDFS(alg.Algorithm):
             for state in pos_states:
                 if knight in state:
                     state.pop()     # Remove the knight
-                    new_node = node.Node(state, knight, curr_state)
+                    new_node = node.Node(state, knight)
                     self.__front.insert(0, new_node)
 
         self.get_chessboard().change_state(curr_state, curr_knight)
