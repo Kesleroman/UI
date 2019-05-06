@@ -1,21 +1,25 @@
 ## Main cycle ##
 def start():
+    print('Type help for a list of commands.')
     while True:
-        command = input("\nEnter a command... (type help)\n")
+        command = input("\nEnter a command...\n")
         command = command.lower().strip()
         
         if command == "help":
             print("\nCommands:\nhelp - this manual.\nadd fact - add new fact to facts.txt file.")
-            print("inference - make one step\n")
+            print("step - make one step of inference\ntill end - make steps of inference while there is an applicable rule in the facts.txt")
             continue
         
         if command == "add fact":
             add_fact()
             continue
 
-        if command == "inference":
+        if command == "step":
             inference()
             continue
+        
+        if command == "till end":
+            inference_till_end()
 
 ## add new fact to facts.txt file ##
 def add_fact():
@@ -28,7 +32,7 @@ def add_fact():
 
     print('New fact (%s) added.' % fact.strip())
 
-## Make one step of the inference. ##
+## Make one step of the inference. Returns True if an applicable rule was found. ##
 def inference():
     try:
         facts_file = open("facts.txt", 'r')
@@ -56,7 +60,13 @@ def inference():
         
         if fact:
             execute_rule(rule, fact)
-            break
+            return True
+
+    return False
+
+def inference_till_end():
+    while inference():
+        pass
 
 ## 
 # Creates a dictionary of knowledge from knowledge_base.txt file.
@@ -65,7 +75,7 @@ def inference():
 def create_dictionary():
     try:
         knowledge = ''
-        for k in open("/home/kesler/Studing/UI/Zadanie4/knowledge_base.txt"):
+        for k in open("knowledge_base.txt"):
             knowledge += k
     except:
         print("There are no knowledge!")
@@ -114,7 +124,6 @@ def check_facts(facts, rule):
             return fact
 
     return None
-
 
 def place_into_variables(splited_rule, splited_fact):
 
@@ -184,6 +193,7 @@ def vars_to_nums(var_dict, dst):
 
     return ret_str.rstrip()
 
+## Evaluate binary operation 'op' for numbers 'a' and 'b' ##  
 def compute(a, op, b):
     if op == '>>':
         return str(int(a) >> int(b))
@@ -206,7 +216,7 @@ def compute(a, op, b):
     if op == '!=':
         return str(int(a) != int(b))  
     
-# Create pairs (variable : number)
+## Create pairs (variable : number from fact) ##
 def var_dictionary(splited_fact, splited_rule):
     
     var_dict = dict()
@@ -255,11 +265,10 @@ def execute_rule(rule, fact):
             add(new_fact)
             print("New fact \"" + new_fact +"\" added.")
 
-
 ## Deletes a fact from facts.txt ##
 def delete(fact):
 
-    with open("/home/kesler/Studing/UI/Zadanie4/facts.txt","r+") as facts:
+    with open("facts.txt","r+") as facts:
         f = facts.readlines()
         facts.seek(0)
         deleted = False
@@ -273,35 +282,8 @@ def delete(fact):
 
 ## Adds new fact to facts.txt ##
 def add(fact):
-    with open("/home/kesler/Studing/UI/Zadanie4/facts.txt","a") as facts:
+    with open("facts.txt","a") as facts:
         facts.write(fact.strip() + '\n')
-
-# def add_into_wild_card(new_fact, splited_fact):
-#     splited_new_fact = new_fact.split(' ')
-
-#     i = 0
-#     l = len(splited_new_fact)
-#     while i < l:
-#         if splited_new_fact[i] == '...':
-#             splited_new_fact.pop(i)
-#             l -= 1
-
-#             j = i
-#             while splited_fact[j-1] != '[':
-#                 j -= 1
-
-#             while splited_fact[j] != ']':
-#                 splited_new_fact.insert(i, splited_fact[j])
-#                 i += 1
-#                 l += 1
-#                 j += 1
-#         i += 1
-
-#     ret_str = str()
-#     for i in range(len(splited_new_fact)):
-#         ret_str += splited_new_fact[i] + ' '
-
-#     return ret_str
 
 
 start()
