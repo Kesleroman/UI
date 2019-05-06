@@ -1,0 +1,46 @@
+IF cypher( ?e ) ?x ?n
+THEN DELETE(cypher( ?e ) ?x ?n),ADD(cypher( ?e ) ?x ?n { ?e >> 1 } [ { ?e & 1 } ] 1)
+
+IF cypher( ?e ) ?x ?n ?m [ ... ] ?l
+THEN DELETE(cypher( ?e ) ?x ?n ?m [ ... ] ?l),ADD(cypher( ?e ) ?x ?n { ?m >> 1 } [ { ?m & 1 } ... ] { ?l + 1 })
+
+[1]
+IF cypher( ?e ) ?x ?n 0 [ ... ] ?l
+THEN DELETE(cypher( ?e ) ?x ?n 0 [ ... ] ?l),ADD(cypher( ?e ) ?x ?n [ ... ] { ?l - 1 } [ ?x ] 1)
+
+IF cypher( ?e ) ?x ?n [ ... ] ?l [ ... ] ?i
+THEN DELETE(cypher( ?e ) ?x ?n [ ... ] ?l [ ... ] ?i),ADD(cypher( ?e ) { ?x * ?x % ?n } ?n [ ... ] { ?l - 1 } [ { ?x * ?x % ?n } ... ] { ?i + 1 })
+
+[1]
+IF cypher( ?e ) ?x ?n [ ?a ... ] 0 [ ?b ... ] ?i
+THEN DELETE(cypher( ?e ) ?x ?n [ ?a ... ] 0 [ ?b ... ] ?i),ADD(cypher( ?e ) ?x ?n [ ... ] [ ... ] { ?i - 1 })
+
+IF cypher( ?e ) ?x ?n [ ?a ... ] [ ?b ... ] ?i,<> { ?a == 1 }
+THEN DELETE(cypher( ?e ) ?x ?n [ ?a ... ] [ ?b ... ] ?i),ADD(cypher( ?e ) { ?x * ?b } ?n [ ... ] [ ... ] { ?i - 1 })
+
+IF cypher( ?e ) ?x ?n [ ?a ... ] [ ?b ... ] ?i,<> { ?a == 0 }
+THEN DELETE(cypher( ?e ) ?x ?n [ ?a ... ] [ ?b ... ] ?i),ADD(cypher( ?e ) ?x ?n [ ... ] [ ... ] { ?i - 1 })
+
+[1]
+IF cypher( ?e ) ?x ?n [ ... ] [ ... ] 0
+THEN DELETE(cypher( ?e ) ?x ?n [ ... ] [ ... ] 0),ADD(cyphered( ?e ) { ?x % ?n } ?n)
+
+[1]
+IF cyphered( ?e ) ?x ?n
+THEN DELETE(cyphered( ?e ) ?x ?n),ADD(Cyphered message is ?x)
+
+if sdf  // TEST 
+THEN asd
+
+IF faktorial 0
+THEN DELETE(faktorial 0),ADD(faktorial 0 je 1)
+
+IF faktorial ?x,<> { ?x != 0 }
+THEN DELETE(faktorial ?x),ADD(medzivypocet ?x { ?x - 1 } ?x)
+
+[1]
+IF medzivypocet ?x 0 ?y
+THEN DELETE(medzivypocet ?x 0 ?y),ADD(faktorial ?x je ?y)
+
+IF medzivypocet ?x ?y ?z
+THEN DELETE(medzivypocet ?x ?y ?z),ADD(medzivypocet ?x { ?y - 1 } { ?y * ?z })

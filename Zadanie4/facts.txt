@@ -1,0 +1,10 @@
+Cyphered message is 136
+Cyphered message is 7
+
+faktorial 0 je 1
+faktorial 5 je 120
+
+Cyphered message is 32
+Cyphered message is 32
+
+faktorial 6 je 720
